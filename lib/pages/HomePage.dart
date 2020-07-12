@@ -42,34 +42,43 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     // final ArgumentoProvider argumentoProvider = Provider.of<ArgumentoProvider>(context);
-    return Scaffold(
-      backgroundColor: Colors.blueGrey,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.black38,
-        title: Text('RealTime'),
-      ),
-      body: SafeArea(
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            padding: EdgeInsets.all(10.0),
-            child: ValueListenableBuilder(
-              valueListenable: socketCliente.miValueListenable,
-              builder: (BuildContext context, List<ItemNuevo> value, _) {
-                // print('estees el valor $value');
-                if(value == null) return Center(child: CircularProgressIndicator());
-                  return GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 20.0,
-                  crossAxisSpacing: 8.0,
-                  padding: EdgeInsets.all(5.0),
-                  children: contenedor(value)
-                );
-              },
-            ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.blueGrey,
+        appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.black38,
+          title: Text('RealTime'),
+        ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          padding: EdgeInsets.all(10.0),
+          child: ValueListenableBuilder(
+            valueListenable: socketCliente.miValueListenable,
+            builder: (BuildContext context, List<ItemNuevo> value, _) {
+              // print('estees el valor $value');
+              if(value == null) return Center(child: CircularProgressIndicator());
+                return GridView.count(
+                crossAxisCount: 3,
+                mainAxisSpacing: 20.0,
+                crossAxisSpacing: 8.0,
+                padding: EdgeInsets.all(5.0),
+                children: contenedor(value)
+              );
+            },
           ),
         ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 1,
+          onTap: (int i) => print(i.toString()),
+          iconSize: 22.0,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.add_to_queue), title: Text('uno'), backgroundColor: Colors.red),
+            BottomNavigationBarItem(icon: Icon(Icons.airplanemode_active), title: Text('dos'))
+          ]
+        ),
+      ),
     );
   }
 
