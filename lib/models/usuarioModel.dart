@@ -13,13 +13,9 @@ String usuarioModelToJson(UsuarioModel data) => json.encode(data.toJson());
 class UsuarioModel {
     UsuarioModel({
       @required this.idUsuario,
-      // @required this.fkIdCasa,
       @required this.nombre,
       this.rol,
       this.password,
-      // @required this.lugar,
-      // @required this.gpio,
-      // @required this.estado,
     });
 
   int idUsuario;

@@ -1,4 +1,3 @@
-import 'package:diseno/pages/administrarDevice.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -7,6 +6,8 @@ import 'package:diseno/utils/provider.dart';
  
 import 'package:diseno/pages/HomePage.dart';
 import 'package:diseno/pages/Administrar_page.dart';
+import 'package:diseno/pages/loginPages.dart';
+import 'package:diseno/pages/administrarDevice.dart';
 
 
 void main() => runApp(MyApp());
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         'home': (_) => HomePage(),
         'administrar': (_) => AdministrarPage(),
         'admindevice': (_) => AdminDevices(),
+        'login': (_) => LoginPage(),
       },
     )
     );

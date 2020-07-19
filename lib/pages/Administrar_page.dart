@@ -1,5 +1,7 @@
 import 'package:diseno/models/usuarioModel.dart';
+import 'package:diseno/pages/administrarDevice.dart';
 import 'package:diseno/usuarioProvider/usuario_provider.dart';
+import 'package:diseno/utils/storage.dart';
 import 'package:flutter/material.dart';
 
 class AdministrarPage extends StatefulWidget {
@@ -9,24 +11,34 @@ class AdministrarPage extends StatefulWidget {
 
 class _AdministrarPageState extends State<AdministrarPage> {
 
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   final UsuarioProvider usuarioProvider = UsuarioProvider();
 
   List<UsuarioModel> usuarios = [];
+  StorageMio storageMio = StorageMio();
 
-  void enviar(){
-    if (_formKey.currentState.validate()) {
-      
-      print('es valido');
+  // void enviar(){
+  //   if (_formKey.currentState.validate()) {
+  //     print('es valido');
+  //   } else {
+  //     print('no es valido');
+  //   }
+  // }
 
-    } else {
-      print('no es valido');
-    }
-  
-  }
-
-  void navegar(){
-    Navigator.pushNamed(context, 'admindevice');
+  void navegar(UsuarioModel usuario) async {
+    print('este es el id del usuario ${usuario.idUsuario}');
+    await storageMio.guardarIdUsuarioOtro( usuario.idUsuario );
+    Navigator.pushReplacementNamed(context, 'admindevice');
+    // Navigator.popAndPushNamed(context, 'admindevice');
+    // Navigator.popUntil(context, ModalRoute.withName('admindevice'));
+    // Navigator.of(context).pop();
+    // Navigator.pushReplacementNamed(context, 'admindevice');
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => AdminDevices( usuario: usuario ),
+    //   ),
+    // );
   }
 
   @override
@@ -37,7 +49,9 @@ class _AdministrarPageState extends State<AdministrarPage> {
 
   obtenerUsuarios() async {
     // id casa
-    usuarios = await usuarioProvider.usuarioPorCasa(4);
+    final id = await storageMio.getterIdCasa();
+    usuarios = await usuarioProvider.usuarioPorCasa(id);
+    // setState(() { });
     if(usuarios != null){
       
     }else {
@@ -53,20 +67,19 @@ class _AdministrarPageState extends State<AdministrarPage> {
 
     return SafeArea(
       child: Scaffold(
-        // backgroundColor: Colors.blueGrey,
-        body: SingleChildScrollView(
-          child: ValueListenableBuilder(
-              valueListenable:  usuarioProvider.miValueListenable,
-              builder: (BuildContext context, List<UsuarioModel> value, Widget _) {
-                if(value == null) return Center(child: CircularProgressIndicator());
-                return Column(
-                  children: regresar(value)
-                );
-              }
-           ),
+      body: SingleChildScrollView(
+        child: ValueListenableBuilder(
+            valueListenable:  usuarioProvider.miValueListenable,
+            builder: (BuildContext context, List<UsuarioModel> value, Widget _) {
+              if(value == null) return Center(child: CircularProgressIndicator());
+              return Column(
+                children: regresar(value)
+              );
+            }
+          ),
         ),
-        )
-      );
+      )
+    );
 
   }
 
@@ -83,8 +96,8 @@ class _AdministrarPageState extends State<AdministrarPage> {
               ),
               child: ListTile(
                 title: Text(e.nombre),
-                subtitle: Text(e.rol ?? ''),
-                onTap: () => navegar(),
+                subtitle: Text(e.rol),
+                onTap: () => navegar(e),
                 trailing: Icon( Icons.arrow_right, color: Colors.blue, size: 30.0)
               )
             ),
