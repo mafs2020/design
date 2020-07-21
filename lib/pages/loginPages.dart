@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     if(_keyform.currentState.validate()) {
       final d = await usuarioProvider.login(nombreController.text, passwordController.text);
       if(d != null){
-        Navigator.pushNamed(context, 'home');
+        Navigator.pushReplacementNamed(context, 'home');
       } else {
         mostrarDialogo(context, 'Error', 'contraseña o usuario esta erroneo');
       }
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: <Widget>[
                             TextFormField(
                               validator: (String val) {
-                                if(val.length < 4 || val.isEmpty){
+                                if(val.isEmpty){
                                   return 'el nombre debe ser mayor a 4';
                                 }
                                 return null;

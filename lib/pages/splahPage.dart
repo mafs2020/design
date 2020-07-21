@@ -1,3 +1,4 @@
+import 'package:diseno/utils/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // import 'package:iot_cel/utils/session.dart';
@@ -10,26 +11,24 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
-  // final session = new Session();
+  final StorageMio storageMio = StorageMio();
 
   @override
   void initState() {
+    setData();
     super.initState();
-    this.setData();
   }
 
   setData() async {
-    print('inicio');
-    // si no encuentra nada regresara nullo
-    // final data = await session.set('token', 'val');
-    // final data1 = await session.set('user', 'val');
-    // if(data != null){
-    //   print('es true');
-    //   Navigator.pushNamed(context, 'home', arguments: data1);
-    // } else {
-    //   print('es false');
-    //   Navigator.pushNamed(context, 'login');
-    // }
+    final id = await storageMio.getteridUsuario();
+    print('inicio $id');
+    await Future.delayed( Duration(milliseconds: 500));
+    if(id != null){
+      // para que no regrese al login
+      Navigator.pushReplacementNamed(context, 'home');
+      return;
+    }
+    Navigator.pushNamed(context, 'login');
   }
 
   @override

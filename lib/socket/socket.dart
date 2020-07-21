@@ -2,7 +2,7 @@ import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:flutter/foundation.dart';
 import 'package:diseno/models/envioModel.dart';
 // import 'package:diseno/models/envioModel.dart';
-import 'package:diseno/utils/provider.dart';
+// import 'package:diseno/utils/provider.dart';
 import 'package:diseno/utils/strems.dart';
 
 class SocketCliente {
@@ -19,7 +19,7 @@ class SocketCliente {
   SocketCliente._internal();
   // singleton
 
-  final _uri = "http://192.168.0.7:4000/";
+  final _uri = "http://192.168.0.2:4000/";
   iniciarSocket() async {
 
     _socket = await _manager.createInstance(SocketOptions(_uri));
@@ -110,7 +110,6 @@ class SocketCliente {
   }
 
   enviar( ItemNuevo item ) {
-    // print('se emiteee desde flutter');
     print('${itemNuevoToJson(item)} este es el valorrrrrrr');
     _socket.emit('angular', [{'device': itemNuevoToJson(item)}]);
   }
@@ -118,12 +117,7 @@ class SocketCliente {
 
 
   cambiarIotModel( ItemNuevo iot ){
-    // for (var item in datos) {
-    //   if(item.idDevice == iot.idDevice){
-    //     item.estado = !item.estado;
-    //     break;
-    //   }
-    // }
+    print('patriarca $iot');
     enviar(iot);
     // miValueListenable.value = datos;
     // miValueListenable.notifyListeners();

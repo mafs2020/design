@@ -12,7 +12,7 @@ final SocketCliente socketCliente = SocketCliente();
 final StorageMio storageMio = StorageMio();
 class UsuarioProvider {
 
-  final url = 'http://192.168.0.7:4000';
+  final url = 'http://192.168.0.2:4000';
   ValueNotifier<List<UsuarioModel>> miValueListenable = ValueNotifier(null);
 
   Future<List<ItemNuevo>> login(String nombre, String password) async {
@@ -21,8 +21,10 @@ class UsuarioProvider {
        if (_data.statusCode == 200) {
           List<ItemNuevo> _datos = [];
           final _response = jsonDecode(_data.body);
+          print('${_response['rol'][0]['fk_id_rol']}');
           storageMio.guardarIdUsuario(_response['usuario']['id_usuario']);
           storageMio.guardarIdCasa(_response['devices'][0]['fk_id_casa']);
+          storageMio.guardarRol(_response['rol'][0]['fk_id_rol'].toString());
           for (final item in _response['devices']) {
             final d = ItemNuevo.fromJson(item);
             _datos.add(d);
@@ -58,7 +60,6 @@ class UsuarioProvider {
   }
 
   Future<List<ItemNuevo>> usuarioDevices() async {
-    // todo hacerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
     // final _idUsuario = await storageMio.getteridUsuario();
     final _idUsuario = await storageMio.getterguardarIdUsuarioOtro();
     print('llenar bote $_idUsuario');
@@ -85,9 +86,7 @@ class UsuarioProvider {
       final response = await http.post('$url/rol/$id');
       final data = jsonDecode(response.body);
       // print(data['rol']['fk_id_rol']);
-      // todo error
       // storageMio.guardarIdUsuarioOtro(data['rol']['fk_id_rol']);
-      // todo error
       return data['rol']['fk_id_rol'];
     } catch (e) {
       print('ocurrio un error en usuario provoder 91 $e');
@@ -111,4 +110,67 @@ class UsuarioProvider {
       return false;
     }
   }
+
+  Future<List<ItemNuevo>> devicesPorCasa() async {
+    final _idCasa = await storageMio.getterIdCasa();
+    try {
+      List<ItemNuevo> _devices = [];
+      final resp = await http.post('$url/devices/casa', body: { "id_casa": _idCasa.toString() });
+      final _response = jsonDecode(resp.body);
+      for (final item in _response['devices']) {
+        final d = ItemNuevo.fromJson(item);
+        _devices.add(d);
+      }
+      return _devices;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+    
+  }
+
+  Future<bool> agregarUsuario(String nombre, String password, int rol, List<int> idDevices) async {
+    final idCasa = await storageMio.getterIdCasa();
+
+    try {
+      await http.post('$url/usuario/usuario/registrar', body: {"nombre" : nombre,"password": password, "id_casa":idCasa, "rol": rol.toString(), "devices":idDevices.toString()});
+      return true;
+    } catch (e) {
+      print('ocurrio un error en el usuarioProvider 138');
+      print(e);
+      return false;
+    }
+    
+  }
+
+  Future<List<ItemNuevo>> milistaDevice() async {
+    try {
+      final id = await storageMio.getteridUsuario();
+      
+      final _data = await http.get('$url/usuario//device/$id');
+      List<ItemNuevo> _datos = [];
+          final _response = jsonDecode(_data.body);
+          for (final item in _response['devices']) {
+            final d = ItemNuevo.fromJson(item);
+            _datos.add(d);
+          }
+          // socketCliente.datos = _datos;
+          socketCliente.miValueListenable.value = _datos;
+          return _datos;
+    } catch (e) {
+      print('ocurrio un error en usuarioProvider 152 $e');
+      return null;
+    }
+  }
+
+  Future<bool> eliminarUsuario(String id) async {
+    try {
+      await http.delete('$url/usuario/usuario/$id');
+      return true;
+    } catch (e) {
+      print('ocurrio un error al eliminar usuario $e ');
+      return false;
+    }
+  }
+
 }

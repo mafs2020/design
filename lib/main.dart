@@ -4,11 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:diseno/utils/provider.dart';
  
+import 'package:diseno/pages/splahPage.dart';
 import 'package:diseno/pages/HomePage.dart';
 import 'package:diseno/pages/Administrar_page.dart';
 import 'package:diseno/pages/loginPages.dart';
 import 'package:diseno/pages/administrarDevice.dart';
 
+import 'pages/agregarUsuarioPage.dart';
 
 void main() => runApp(MyApp());
  
@@ -36,6 +38,8 @@ class MyApp extends StatelessWidget {
         'administrar': (_) => AdministrarPage(),
         'admindevice': (_) => AdminDevices(),
         'login': (_) => LoginPage(),
+        'splash': (_) => SplashPage(),
+        'addUser': (_) => AddUSerPAge(),
       },
     )
     );

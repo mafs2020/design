@@ -1,5 +1,5 @@
 import 'package:diseno/models/envioModel.dart';
-import 'package:diseno/models/usuarioModel.dart';
+// import 'package:diseno/models/usuarioModel.dart';
 import 'package:diseno/usuarioProvider/usuario_provider.dart';
 import 'package:diseno/utils/storage.dart';
 import 'package:diseno/widgets/mostrarDialogo.dart';
@@ -35,7 +35,6 @@ class _AdminDevicesState extends State<AdminDevices> {
   dispositivos() async {
     // final storageMio.getIdUsuarioDevice();
     devices = await usuarioProvider.usuarioDevices();
-    // todo bien hasta aqui
     _cambio = await usuarioProvider.getRol();
     if(_cambio == 1){
       agregarDevicesForAdmin();
@@ -43,7 +42,9 @@ class _AdminDevicesState extends State<AdminDevices> {
     // devices.forEach((element) {  print('${element.idDevice} : ${element.estado}');});
     setState(() {});
   }
-  agregarDevicesForAdmin(){
+  
+  void agregarDevicesForAdmin(){
+    _idDevices?.clear();
     devices.forEach((e) => _idDevices.add(e.idDevice));
       devices = devices.map((e) {
         e.estado = true;
@@ -51,7 +52,7 @@ class _AdminDevicesState extends State<AdminDevices> {
       }).toList();
   }
 
-  cambiarRadio(int valor) {
+  void cambiarRadio(int valor) {
     if(valor == 1){
       agregarDevicesForAdmin();
     } else {
@@ -76,7 +77,8 @@ class _AdminDevicesState extends State<AdminDevices> {
     _idDevices.map((e) => print(e));
     setState(() {});
   }
-  actualizarUsuario() async {
+
+  void actualizarUsuario() async {
     // print('$_idDevices, $_cambio es aqui');
     if(_idDevices.isEmpty){
       return;
