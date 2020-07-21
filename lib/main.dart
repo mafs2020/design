@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           title: Text('Material App Bar'),
         ),
       ),
-      initialRoute: 'administrar',
+      initialRoute: 'splash',
       routes: <String, WidgetBuilder>{
         'home': (_) => HomePage(),
         'administrar': (_) => AdministrarPage(),

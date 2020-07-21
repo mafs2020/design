@@ -69,9 +69,10 @@ class SocketCliente {
     
     _socket.on('seActualizoExitosamente', (data) {
       // este es el que se utiliza
-      print('seActualizoExitosamente');
+      print('seActualizoExitosamente socket 72');
       final d = ItemNuevo.fromJson(data['device']);
       for (var item in datos) {
+        print(item.nombre);
         if(d.idDevice == item.idDevice){
           item.estado = d.estado;
           break;
@@ -88,18 +89,11 @@ class SocketCliente {
 
     _socket.on('emitir', (data) {
       print('============backend==========');
-      // print( data.runtimeType);
-      // stremss.input.add();
-      // stremsMio.incrementar = f;
-      // _argumentoProvider.counter = data['sumar'];
-      // _argumentoProvider.incrementar(f);
-      // stremsMio.input.add(f);
-// data['sumar']
-      // stremsMio.input.add(data['sumar']);
       for (final _item in data['sumar']) {
         final ItemNuevo d = ItemNuevo.fromJson(_item);
         datos.add(d);
       }
+      print(datos);
       miValueListenable.value = datos;
       
     });
@@ -110,7 +104,7 @@ class SocketCliente {
   }
 
   enviar( ItemNuevo item ) {
-    print('${itemNuevoToJson(item)} este es el valorrrrrrr');
+    print('este es el valor ${itemNuevoToJson(item)}');
     _socket.emit('angular', [{'device': itemNuevoToJson(item)}]);
   }
 
@@ -121,10 +115,6 @@ class SocketCliente {
     enviar(iot);
     // miValueListenable.value = datos;
     // miValueListenable.notifyListeners();
-  }
-
-  agregarTodos(List<ItemNuevo> f ){
-    datos = f;
   }
   
 }

@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:diseno/utils/storage.dart';
 import 'package:diseno/models/envioModel.dart';
-// import 'package:provider/provider.dart';
 import 'package:diseno/usuarioProvider/usuario_provider.dart';
-// import 'package:diseno/utils/provider.dart';
-// import 'package:diseno/utils/strems.dart';
 import '../socket/socket.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,20 +11,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final StremsMio stremss = StremsMio();
   final UsuarioProvider usuarioProvider = UsuarioProvider();
   final SocketCliente socketCliente = SocketCliente();
   final StorageMio storageMio = StorageMio();
   int _rol;
+
   @override
   void initState() {
     iniciar();
     super.initState();
   }
+
   iniciar() async {
     socketCliente.iniciarSocket();
-    // final res = await usuarioProvider.login('henry', '123456');
-    // socketCliente.miValueListenable.value = res;
     await usuarioProvider.milistaDevice();
     final _roll = await storageMio.getterRol();
     _rol = int.parse(_roll);
@@ -81,7 +77,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.blueGrey,
         drawerEnableOpenDragGesture: _rol == 1 ? true : false,
-        drawer: (_rol == 1) ? Drawer(
+        drawer: _rol == 1 ? Drawer(
           child: Column(
             children: <Widget>[
               ListTile(
@@ -141,10 +137,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              // Opacity(
-              //   opacity: e.estado ? 0.7 : 0.4,
-              //   child: Icon(Icons.lightbulb_outline, color: e.estado ? Colors.yellow[400] : Colors.white30, size: 40.0,)
-              // ),
               Icon(
                 Icons.lightbulb_outline,
                 size: 32.0,

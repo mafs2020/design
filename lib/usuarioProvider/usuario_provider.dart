@@ -146,17 +146,16 @@ class UsuarioProvider {
   Future<List<ItemNuevo>> milistaDevice() async {
     try {
       final id = await storageMio.getteridUsuario();
-      
-      final _data = await http.get('$url/usuario//device/$id');
+      final _data = await http.get('$url/usuario/device/$id');
       List<ItemNuevo> _datos = [];
-          final _response = jsonDecode(_data.body);
-          for (final item in _response['devices']) {
-            final d = ItemNuevo.fromJson(item);
-            _datos.add(d);
-          }
-          // socketCliente.datos = _datos;
-          socketCliente.miValueListenable.value = _datos;
-          return _datos;
+      final _response = jsonDecode(_data.body);
+      for (final item in _response['devices']) {
+        final d = ItemNuevo.fromJson(item);
+        _datos.add(d);
+      }
+      socketCliente.miValueListenable.value = _datos;
+      socketCliente.datos = _datos;
+      return _datos;
     } catch (e) {
       print('ocurrio un error en usuarioProvider 152 $e');
       return null;
