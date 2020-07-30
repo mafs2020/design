@@ -77,60 +77,26 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         // backgroundColor: Colors.black,
         drawerEnableOpenDragGesture: _rol == 1 ? true : false,
-        drawer: _rol == 1 ? Drawer(
-          child: Column(
-            children: <Widget>[
-              DrawerHeader(
-                padding: EdgeInsets.zero,
-                child: Container(),
-                decoration: BoxDecoration(
-                  // image: DecorationImage(
-                  //   image: AssetImage(''),
-                  //   fit: BoxFit.cover
-                  // )
-                ),
-              ),
-              // DrawerController(child: null, alignment: null)
-              ListTile(
-                onTap: () => Navigator.pushNamed(context, 'administrar'),
-                title: Text('Actualizar usuario'),
-              ),
-              ListTile(
-                onTap: () => Navigator.pushNamed(context, 'addUser'),
-                title: Text('Agregar usuario'),
-              )
-            ]
-          ),
-        ) : null,
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.black38,
-          title: Text('RealTime'),
-          actions: <Widget>[ Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(icon: Icon(Icons.account_circle), onPressed: cerrarSesion)
-          ) ],
-        ),
+        drawer: _rol == 1 ? _buildDrawer(context) : null,
+        appBar: _buildAppBar(),
         body: Container(
-          width: double.infinity,
-          height: double.infinity,
+          padding: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: AlignmentDirectional.bottomEnd,
               colors: <Color>[
               Color.fromRGBO(40, 138, 143, 0.5),
-              Color.fromRGBO(10, 138, 93, 0.5),
+              Color.fromRGBO(10, 138, 93, 0.5)
               // Color.fromRGBO(200, 200, 180, 0.5),
             ])
           ),
-          padding: EdgeInsets.all(10.0),
           child: ValueListenableBuilder(
             valueListenable: socketCliente.miValueListenable,
             builder: (BuildContext context, List<ItemNuevo> value, _) {
               // print('estees el valor $value');
               if(value == null) return Center(child: CircularProgressIndicator());
                 return GridView.count(
-                crossAxisCount: 3,
+                crossAxisCount: 2,
                 mainAxisSpacing: 20.0,
                 crossAxisSpacing: 8.0,
                 padding: EdgeInsets.all(5.0),
@@ -143,13 +109,57 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  AppBar _buildAppBar() {
+    return AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.black38,
+        title: Text('RealTime'),
+        actions: <Widget>[ Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: IconButton(icon: Icon(Icons.account_circle), onPressed: cerrarSesion)
+        ) ],
+      );
+  }
+
+  Drawer _buildDrawer(BuildContext context) {
+    return Drawer(
+        child: Column(
+          children: <Widget>[
+            DrawerHeader(
+              padding: EdgeInsets.zero,
+              child: Container(),
+              decoration: BoxDecoration(
+                // image: DecorationImage(
+                //   image: AssetImage(''),
+                //   fit: BoxFit.cover
+                // )
+              ),
+            ),
+            // DrawerController(child: null, alignment: null)
+            ListTile(
+              onTap: () => Navigator.pushNamed(context, 'administrar'),
+              title: Text('Actualizar usuario'),
+            ),
+            ListTile(
+              onTap: () => Navigator.pushNamed(context, 'addUser'),
+              title: Text('Agregar usuario'),
+            )
+          ]
+        ),
+      );
+  }
+
   List<Widget> contenedor(List<ItemNuevo> datos) {
-    return datos.map((ItemNuevo e) => InkWell(
+    
+    return datos.map((ItemNuevo e) => GestureDetector(
       onTap: () => emitirEvento(e),
       child: Container(
         decoration: BoxDecoration(
           color: e.estado ? Colors.lightBlue[200] : Colors.grey[200],
-          borderRadius: BorderRadius.circular(25)
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: <BoxShadow>[
+            BoxShadow(color: Colors.black, offset: Offset(3.0, 7.0), blurRadius: 4.0)
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -285,4 +295,36 @@ switch (data.connectionState) {
 //             BottomNavigationBarItem(icon: Icon(Icons.add_to_queue), title: Text('uno'), backgroundColor: Colors.red),
 //             BottomNavigationBarItem(icon: Icon(Icons.airplanemode_active), title: Text('dos'))
 //           ]
+//         ),
+
+
+
+// ==================== ORIGINAL =====================
+// Container(
+//           width: double.infinity,
+//           height: double.infinity,
+//           decoration: BoxDecoration(
+//             gradient: LinearGradient(
+//               begin: AlignmentDirectional.bottomEnd,
+//               colors: <Color>[
+//               Color.fromRGBO(40, 138, 143, 0.5),
+//               Color.fromRGBO(10, 138, 93, 0.5),
+//               // Color.fromRGBO(200, 200, 180, 0.5),
+//             ])
+//           ),
+//           padding: EdgeInsets.all(10.0),
+//           child: ValueListenableBuilder(
+//             valueListenable: socketCliente.miValueListenable,
+//             builder: (BuildContext context, List<ItemNuevo> value, _) {
+//               // print('estees el valor $value');
+//               if(value == null) return Center(child: CircularProgressIndicator());
+//                 return GridView.count(
+//                 crossAxisCount: 2,
+//                 mainAxisSpacing: 20.0,
+//                 crossAxisSpacing: 8.0,
+//                 padding: EdgeInsets.all(5.0),
+//                 children: contenedor(value)
+//               );
+//             },
+//           ),
 //         ),
