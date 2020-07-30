@@ -75,11 +75,22 @@ class _HomePageState extends State<HomePage> {
     // final ArgumentoProvider argumentoProvider = Provider.of<ArgumentoProvider>(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blueGrey,
+        // backgroundColor: Colors.black,
         drawerEnableOpenDragGesture: _rol == 1 ? true : false,
         drawer: _rol == 1 ? Drawer(
           child: Column(
             children: <Widget>[
+              DrawerHeader(
+                padding: EdgeInsets.zero,
+                child: Container(),
+                decoration: BoxDecoration(
+                  // image: DecorationImage(
+                  //   image: AssetImage(''),
+                  //   fit: BoxFit.cover
+                  // )
+                ),
+              ),
+              // DrawerController(child: null, alignment: null)
               ListTile(
                 onTap: () => Navigator.pushNamed(context, 'administrar'),
                 title: Text('Actualizar usuario'),
@@ -103,12 +114,20 @@ class _HomePageState extends State<HomePage> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: AlignmentDirectional.bottomEnd,
+              colors: <Color>[
+              Color.fromRGBO(40, 138, 143, 0.5),
+              Color.fromRGBO(10, 138, 93, 0.5),
+              // Color.fromRGBO(200, 200, 180, 0.5),
+            ])
+          ),
           padding: EdgeInsets.all(10.0),
-          child: 
-          ValueListenableBuilder(
+          child: ValueListenableBuilder(
             valueListenable: socketCliente.miValueListenable,
             builder: (BuildContext context, List<ItemNuevo> value, _) {
-              print('estees el valor $value');
+              // print('estees el valor $value');
               if(value == null) return Center(child: CircularProgressIndicator());
                 return GridView.count(
                 crossAxisCount: 3,
@@ -127,31 +146,28 @@ class _HomePageState extends State<HomePage> {
   List<Widget> contenedor(List<ItemNuevo> datos) {
     return datos.map((ItemNuevo e) => InkWell(
       onTap: () => emitirEvento(e),
-      child: AspectRatio(
-        aspectRatio: 1.0,
-        child: Container(
-          decoration: BoxDecoration(
-            color: e.estado ? Colors.lightBlue[200] : Colors.grey[200],
-            borderRadius: BorderRadius.circular(25)
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Icon(
-                Icons.lightbulb_outline,
-                size: 32.0,
-                color: e.estado ? Colors.yellow[400] : Colors.grey[500]
-              ),
-              SizedBox(height: 8),
-              Text(
-                e.lugar,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: e.estado ? Colors.white : Colors.grey[500], fontSize: 22.0, fontWeight: FontWeight.w500),
-              )
-              // Container(child: Text(e.lugar, overflow: TextOverflow.ellipsis, style: TextStyle(color: e.estado ? Colors.white : Colors.white30, fontSize: 22.0, fontWeight: FontWeight.w500))),
-            ]
-          )
+      child: Container(
+        decoration: BoxDecoration(
+          color: e.estado ? Colors.lightBlue[200] : Colors.grey[200],
+          borderRadius: BorderRadius.circular(25)
         ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Icon(
+              Icons.lightbulb_outline,
+              size: 32.0,
+              color: e.estado ? Colors.yellow[400] : Colors.grey[500]
+            ),
+            SizedBox(height: 8),
+            Text(
+              e.lugar,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(color: e.estado ? Colors.white : Colors.grey[500], fontSize: 22.0, fontWeight: FontWeight.w500)
+            )
+            // Container(child: Text(e.lugar, overflow: TextOverflow.ellipsis, style: TextStyle(color: e.estado ? Colors.white : Colors.white30, fontSize: 22.0, fontWeight: FontWeight.w500))),
+          ]
+        )
       )
     )).toList();
   }

@@ -19,7 +19,7 @@ class SocketCliente {
   SocketCliente._internal();
   // singleton
 
-  final _uri = "http://192.168.0.2:4000/";
+  final _uri = "http://192.168.0.7:4000/";
   iniciarSocket() async {
 
     _socket = await _manager.createInstance(SocketOptions(_uri));
@@ -111,7 +111,6 @@ class SocketCliente {
 
 
   cambiarIotModel( ItemNuevo iot ){
-    print('patriarca $iot');
     enviar(iot);
     // miValueListenable.value = datos;
     // miValueListenable.notifyListeners();

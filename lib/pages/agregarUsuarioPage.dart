@@ -16,9 +16,9 @@ List<ItemNuevo> devices = [];
 int _cambio;
 List<int> _idDevices = [];
 final _formKey = GlobalKey<FormState>();
-final TextEditingController nameController = TextEditingController();
-final TextEditingController passwordController = TextEditingController();
-final TextEditingController confirmPAsswordController = TextEditingController();
+TextEditingController nameController;
+TextEditingController passwordController;
+TextEditingController confirmPAsswordController;
 
 
 class _AddUSerPAgeState extends State<AddUSerPAge> {
@@ -92,6 +92,9 @@ void agregarDevicesForAdmin(){
   @override
   void initState() { 
     dispositivos();
+    nameController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmPAsswordController = TextEditingController();
     super.initState();
   }
   @override

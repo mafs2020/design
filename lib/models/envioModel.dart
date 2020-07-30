@@ -24,6 +24,8 @@ class ItemNuevo {
   String nombre, lugar, gpio;
   bool estado;
 
+    // print(json);
+    // print('llegoooo');
   factory ItemNuevo.fromJson(Map<String, dynamic> json) => ItemNuevo(
     idDevice: json["id_device"],
     fkIdCasa: json["fk_id_casa"],
@@ -31,7 +33,6 @@ class ItemNuevo {
     lugar: json["lugar"],
     gpio: json["gpio"],
     estado : json['estado'] == 1 ? true : false
-    
   );
 
   Map<String, dynamic> toJson() => {

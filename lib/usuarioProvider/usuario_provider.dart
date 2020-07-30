@@ -12,7 +12,7 @@ final SocketCliente socketCliente = SocketCliente();
 final StorageMio storageMio = StorageMio();
 class UsuarioProvider {
 
-  final url = 'http://192.168.0.2:4000';
+  final url = 'http://192.168.0.7:4000';
   ValueNotifier<List<UsuarioModel>> miValueListenable = ValueNotifier(null);
 
   Future<List<ItemNuevo>> login(String nombre, String password) async {
