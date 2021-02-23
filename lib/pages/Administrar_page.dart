@@ -117,12 +117,12 @@ class _AdministrarPageState extends State<AdministrarPage> {
     return SafeArea(
       child: Scaffold(
         // key: _scaffoldKey,
-        appBar: AppBar(centerTitle: true, title: Text('Administrar usuario')),
+      appBar: AppBar(centerTitle: true, title: Text('Administrar Usuario')),
       body: SingleChildScrollView(
         child: ValueListenableBuilder(
             valueListenable:  usuarioProvider.miValueListenable,
             builder: (BuildContext context, List<UsuarioModel> value, Widget _) {
-              if(value == null) return Center(child: CircularProgressIndicator());
+              if(value == null) return Center(child:CircularProgressIndicator());
               return Column(
                 children: regresar(value)
               );
@@ -147,7 +147,7 @@ class _AdministrarPageState extends State<AdministrarPage> {
         // dragStartBehavior: DragStartBehavior.down,
         dismissThresholds: {
           // DismissDirection.startToEnd: 0.1,
-          DismissDirection.endToStart: 0.7
+          DismissDirection.endToStart: 0.5
         },
         // key: Key(e.idUsuario.toString()),
         key: UniqueKey(),
@@ -171,7 +171,7 @@ class _AdministrarPageState extends State<AdministrarPage> {
                   title: Text(e.nombre),
                   subtitle: Text(e.rol),
                   onTap: () => navegar(e),
-                  trailing: Icon( Icons.arrow_right, color: Colors.blue, size: 30.0)
+                  trailing: Icon( Icons.arrow_right, color: Colors.blue, size: 40.0)
                 )
               ),
               Divider(height: 5.0)

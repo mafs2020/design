@@ -39,19 +39,19 @@ class _AdminDevicesState extends State<AdminDevices> {
     if(_cambio == 1){
       agregarDevicesForAdmin();
     }
-    // devices.forEach((element) {  print('${element.idDevice} : ${element.estado}');});
     setState(() {});
   }
   
   void agregarDevicesForAdmin(){
     _idDevices?.clear();
-    devices.forEach((e) => _idDevices.add(e.idDevice));
-      devices = devices.map((e) {
-        e.estado = true;
-        return e;
-      }).toList();
+    devices = devices.map((e) {
+      e.estado = true;
+      _idDevices.add(e.idDevice);
+      return e;
+    }).toList();
   }
 
+  // este si se usa
   void cambiarRadio(int valor) {
     if(valor == 1){
       agregarDevicesForAdmin();
@@ -65,7 +65,7 @@ class _AdminDevicesState extends State<AdminDevices> {
     setState(() => _cambio = valor);
   }
 
-  void cambiarEstado(ItemNuevo device){
+  void cambiarEstado(ItemNuevo device) {
 
     final index = devices.indexOf(device);
     devices[index].estado = !devices[index].estado;
@@ -74,21 +74,19 @@ class _AdminDevicesState extends State<AdminDevices> {
     } else {
       _idDevices.add(device.idDevice);
     }
-    _idDevices.map((e) => print(e));
     setState(() {});
   }
 
   void actualizarUsuario() async {
-    // print('$_idDevices, $_cambio es aqui');
     if(_idDevices.isEmpty){
+      print('entro');
       return;
     }
 
     final isTrue = await usuarioProvider.actualizarUsuario(_idDevices, _cambio);
+    
     if(isTrue){
-      
       Navigator.pushNamed(context, 'administrar');
-      
       // Navigator.of(context).pushNamed('administrar');
       mostrarDialogo(context, 'Actualizacion', 'se actualizo con exito');
     }else {
@@ -109,7 +107,13 @@ class _AdminDevicesState extends State<AdminDevices> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Column(children: listaDevices()),
+                ValueListenableBuilder(
+                  valueListenable: usuarioProvider.miValueUser,
+                  builder: (BuildContext context, List<ItemNuevo> value, Widget _) {
+                    if(value == null) return Center(child: CircularProgressIndicator());
+                      return Column(children: listaDevices(value));
+                  },
+                ),
                 Divider(),
                 RadioListTile(value: 1, groupValue: _cambio, onChanged: cambiarRadio, title: Text('Administrador')),
                 Divider(),
@@ -127,9 +131,10 @@ class _AdminDevicesState extends State<AdminDevices> {
     );
   }
 
-  List<Widget> listaDevices() {
-    final f = devices.map(( ItemNuevo e) => CheckboxListTile(value: e.estado, onChanged: (_cambio != 1) ? (estado) => cambiarEstado(e) : null, title: Text(e.lugar))).toList();
-    return f;
+  List<Widget> listaDevices(List<ItemNuevo> devices) {
+    print('hhhhhhhhhhhhhhhhhhhhh $devices');
+    return devices.map(( ItemNuevo e) => CheckboxListTile(value: e.estado, onChanged: (_cambio != 1) ? (estado) => cambiarEstado(e) : null, title: Text(e.lugar))).toList();
+    
   }
 
 }

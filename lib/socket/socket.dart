@@ -111,7 +111,6 @@ class SocketCliente {
 
 
   cambiarIotModel( ItemNuevo iot ){
-    print('patriarca $iot');
     enviar(iot);
     // miValueListenable.value = datos;
     // miValueListenable.notifyListeners();

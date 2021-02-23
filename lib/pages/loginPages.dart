@@ -10,9 +10,17 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _keyform = GlobalKey<FormState>();
   
-  TextEditingController nombreController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController nombreController;
+  TextEditingController passwordController;
   final UsuarioProvider usuarioProvider = UsuarioProvider();
+
+  @override
+  void initState() { 
+    nombreController = new TextEditingController();
+    passwordController = new TextEditingController();
+    super.initState();
+    
+  }
   
    @override
   void dispose() {
