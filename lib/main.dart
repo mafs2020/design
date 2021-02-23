@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:diseno/utils/provider.dart';
 import 'package:diseno/provider/push_notification_provider.dart';
- 
+
 import 'package:diseno/pages/splahPage.dart';
 import 'package:diseno/pages/HomePage.dart';
 import 'package:diseno/pages/Administrar_page.dart';
@@ -14,7 +14,7 @@ import 'package:diseno/pages/administrarDevice.dart';
 import 'pages/agregarUsuarioPage.dart';
 
 void main() => runApp(MyApp());
- 
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -25,47 +25,51 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    final PushNotificationProvider _pushNotificationProvider = PushNotificationProvider();
+    final PushNotificationProvider _pushNotificationProvider =
+        PushNotificationProvider();
     _pushNotificationProvider.initNotifications();
-    _pushNotificationProvider.mensajesStream.listen((event) { 
+    _pushNotificationProvider.mensajesStream.listen((event) {
       print('este es el main');
       // _navigatorKey.currentState.pushNamed('addUser');
-     });
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ArgumentoProvider>(create: (_) => ArgumentoProvider(),),
-      ],
-    child: MaterialApp(
-      navigatorKey: _navigatorKey,
-      title: 'Material App',
+        providers: [
+          ChangeNotifierProvider<ArgumentoProvider>(
+            create: (_) => ArgumentoProvider(),
+          ),
+        ],
+        child: MaterialApp(
+          navigatorKey: _navigatorKey,
+          title: 'Material App',
 
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
-      // theme: ThemeData(
-      //   textTheme: GoogleFonts.poppinsTextTheme()
-      //   the
-      // ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Material App Bar'),
-        ),
-      ),
-      initialRoute: 'splash',
-      routes: <String, WidgetBuilder>{
-        'home': (_) => HomePage(),
-        'administrar': (_) => AdministrarPage(),
-        'admindevice': (_) => AdminDevices(),
-        'login': (_) => LoginPage(),
-        'splash': (_) => SplashPage(),
-        'addUser': (_) => AddUSerPAge(),
-      },
-    )
-    );
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData.dark(),
+          // theme: ThemeData(
+          //   textTheme: GoogleFonts.poppinsTextTheme()
+          //   the
+          // ),
+          home: Scaffold(
+            appBar: AppBar(
+              title: Text('Material App Bar'),
+            ),
+          ),
+          initialRoute: 'splash',
+          routes: <String, WidgetBuilder>{
+            'home': (_) => HomePage(),
+            // aqui
+            'administrar': (_) => AdministrarPage(),
+            // aqui
+            'admindevice': (_) => AdminDevices(),
+            'login': (_) => LoginPage(),
+            'splash': (_) => SplashPage(),
+            'addUser': (_) => AddUSerPAge(),
+          },
+        ));
   }
 }
 

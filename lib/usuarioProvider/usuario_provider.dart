@@ -12,8 +12,14 @@ final SocketCliente socketCliente = SocketCliente();
 final StorageMio storageMio = StorageMio();
 class UsuarioProvider {
 
-  final url = 'http://192.168.0.7:4000';
+  final url = 'http://192.168.0.2:4000';
+  // singleton
+  static final UsuarioProvider _singleton = new UsuarioProvider._internal();
+  factory UsuarioProvider() => _singleton;
+  UsuarioProvider._internal();
+  
   ValueNotifier<List<UsuarioModel>> miValueListenable = ValueNotifier(null);
+  ValueNotifier<List<ItemNuevo>> miValueUser = ValueNotifier(null);
 
   Future<List<ItemNuevo>> login(String nombre, String password) async {
     try {
@@ -72,6 +78,8 @@ class UsuarioProvider {
         final d = ItemNuevo.fromJson(item);
         devices.add(d);
       }
+      miValueUser.value = devices;
+      miValueUser.notifyListeners();
       return devices;
     } catch (e) {
       print('ocurrio un error 76 usuarioprovider $e');
@@ -169,6 +177,22 @@ class UsuarioProvider {
     } catch (e) {
       print('ocurrio un error al eliminar usuario $e ');
       return false;
+    }
+  }
+
+  Future<void> ubicacion(String ubicacion) async {
+    try {
+      List<ItemNuevo> _datos = [];
+      final idCasa = await storageMio.getterIdCasa();
+      final resp = await http.post('$url/devices/ubicacion/$idCasa', body: {"lugar":ubicacion});
+      final data = jsonDecode(resp.body);
+      for (final item in data['devices']) {
+        final d = ItemNuevo.fromJson(item);
+        _datos.add(d);
+      }
+      socketCliente.miValueListenable.value = _datos;
+    } catch (e) {
+      print('ocurrio un error al eliminar usuario $e ');
     }
   }
 

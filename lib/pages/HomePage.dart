@@ -14,6 +14,8 @@ class _HomePageState extends State<HomePage> {
   final UsuarioProvider usuarioProvider = UsuarioProvider();
   final SocketCliente socketCliente = SocketCliente();
   final StorageMio storageMio = StorageMio();
+  final List<String> cuartos = ['cuarto', 'cuarto 2', 'cuarto 3', 'cuarto 4', 'cocina','baño','sala','comedor','cocina','cuarto principal','cuarto secundario', 'jardin'];
+  int seleccionado = 0;
   int _rol;
 
   @override
@@ -70,42 +72,89 @@ class _HomePageState extends State<HomePage> {
   );
   }
 
+  void cambiar(int i, String ubicacion) async {
+    setState(() { seleccionado = i; });
+    ubicacion = ubicacion ?? 'cuarto';
+    await usuarioProvider.ubicacion(ubicacion);
+  }
+
   @override
   Widget build(BuildContext context) {
     // final ArgumentoProvider argumentoProvider = Provider.of<ArgumentoProvider>(context);
+    final Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        // backgroundColor: Colors.black,
+        // backgroundColor: Colors.black38,
         drawerEnableOpenDragGesture: _rol == 1 ? true : false,
         drawer: _rol == 1 ? _buildDrawer(context) : null,
         appBar: _buildAppBar(),
-        body: Container(
-          padding: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: AlignmentDirectional.bottomEnd,
-              colors: <Color>[
-              Color.fromRGBO(40, 138, 143, 0.5),
-              Color.fromRGBO(10, 138, 93, 0.5)
-              // Color.fromRGBO(200, 200, 180, 0.5),
-            ])
-          ),
-          child: ValueListenableBuilder(
-            valueListenable: socketCliente.miValueListenable,
-            builder: (BuildContext context, List<ItemNuevo> value, _) {
-              // print('estees el valor $value');
-              if(value == null) return Center(child: CircularProgressIndicator());
-                return GridView.count(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20.0,
-                crossAxisSpacing: 8.0,
-                padding: EdgeInsets.all(5.0),
-                children: contenedor(value)
-              );
-            },
-          ),
+        body: Column(
+          children: <Widget>[
+            Container(
+              height: size.height * 0.1,
+              // decoration: BoxDecoration(
+              //   borderRadius: BorderRadius.only(
+              //     bottomRight: Radius.circular(20),
+              //     bottomLeft: Radius.circular(20),
+              //   ),
+                // border: Border.all(width: 3,color: Colors.green,style: BorderStyle.solid)
+              // ),
+              child: buildListView(),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(10.0),
+                color: Colors.white,
+                // decoration: BoxDecoration(
+                //   gradient: LinearGradient(
+                //     begin: AlignmentDirectional.bottomEnd,
+                //     colors: <Color>[
+                //     Color.fromRGBO(40, 138, 143, 0.5),
+                //     Color.fromRGBO(10, 138, 93, 0.5)
+                //     // Color.fromRGBO(200, 200, 180, 0.5),
+                //   ])
+                // ),
+                child: ValueListenableBuilder(
+                  valueListenable: socketCliente.miValueListenable,
+                  builder: (BuildContext context, List<ItemNuevo> value, _) {
+                    // print('estees el valor $value');
+                    if(value == null) return Center(child: CircularProgressIndicator());
+                      return GridView.count(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 20.0,
+                      crossAxisSpacing: 8.0,
+                      padding: EdgeInsets.all(5.0),
+                      children: contenedor(value)
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  ListView buildListView() {
+    return ListView.builder(
+      itemCount: cuartos.length,
+      physics: BouncingScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      itemBuilder: (BuildContext context, int i) {
+        final String nombre = cuartos[i];
+        return InkWell(
+          onTap: () => cambiar(i, nombre),
+          child: Container(
+            decoration: BoxDecoration(
+              color: i == seleccionado ? Colors.orangeAccent : Colors.transparent,
+              borderRadius: BorderRadius.circular(15.0)
+            ),
+            padding: EdgeInsets.all(20.0),
+            child: Text(nombre.toUpperCase(), style: TextStyle(fontWeight: FontWeight.w500 ), overflow: TextOverflow.ellipsis)
+          ),
+        );
+      },
     );
   }
 
@@ -155,27 +204,23 @@ class _HomePageState extends State<HomePage> {
       onTap: () => emitirEvento(e),
       child: Container(
         decoration: BoxDecoration(
-          color: e.estado ? Colors.lightBlue[200] : Colors.grey[200],
-          borderRadius: BorderRadius.circular(25),
-          boxShadow: <BoxShadow>[
-            BoxShadow(color: Colors.black, offset: Offset(3.0, 7.0), blurRadius: 4.0)
-          ],
+          color: e.estado ? Colors.lightBlue[200] : Colors.black12,
+          // color: e.estado ? Colors.lightBlue[200] : Colors.grey[200],
+          borderRadius: BorderRadius.circular(25)
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Icon(
               Icons.lightbulb_outline,
-              size: 32.0,
+              size: 35.0,
               color: e.estado ? Colors.yellow[400] : Colors.grey[500]
             ),
-            SizedBox(height: 8),
             Text(
               e.lugar,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(color: e.estado ? Colors.white : Colors.grey[500], fontSize: 22.0, fontWeight: FontWeight.w500)
             )
-            // Container(child: Text(e.lugar, overflow: TextOverflow.ellipsis, style: TextStyle(color: e.estado ? Colors.white : Colors.white30, fontSize: 22.0, fontWeight: FontWeight.w500))),
           ]
         )
       )
